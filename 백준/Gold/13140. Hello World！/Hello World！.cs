@@ -1,107 +1,37 @@
 using System;
 
-class c13140
+int[] table = new int[7];
+int result = int.Parse(Console.ReadLine());
+
+if (result > 184010 || result < 33986) goto OUT; //종료
+
+if (recur(0, 0)) 
 {
-    static int NUMBER;
-    static int[] answer = new int[5];
-    static int[] table = new int[7];
-    static character ch = new character();
-    struct character
-    {
-        public int h;
-        public int w;
-        public int e;
-        public int o;
-        public int l;
-        public int r;
-        public int d;
-    }
-    static void Main(string[] args)
-    {
-        int[,] map = new int[2, 5];
-        string input = Console.ReadLine();
-
-        //최대, 최소 반례
-        NUMBER = int.Parse(input);
-        if (NUMBER > 184010 || NUMBER < 33986) goto OUT; //종료
-
-        //main
-        HashSet<int> visited = new HashSet<int>();
-        if(recursion(visited, map))
-        {
-            display(map); return;
-        }
-
-    OUT: Console.WriteLine("No Answer");
-    }
-    static bool recursion(HashSet<int> visited, int[,] map)
-    {
-        if (visited.Count == 7)
-        {
-            sync(visited, map);
-            if(IsPossible(map))
-            {
-                return true;
-            }
-            return false;
-        }
-        int i = visited.Count <= 1 ? 1 : 0;
-        for (; i < 10; i++)
-        {
-            if (visited.Contains(i)) continue;
-            visited.Add(i);
-            if(recursion(visited, map))
-            {
-                return true;
-            }
-            visited.Remove(i);
-        }
-        return false;
-    }
-    static bool IsPossible(int[,] map)
-    {
-        int[] sum = { 0, 0 };
-        for(int i = 0; i < 2; i++)
-        {
-            int mul = 1;
-            for(int j = 4; j >= 0; j--)
-            {
-                sum[i] += map[i, j] * mul;
-                mul *= 10;
-            }
-        }
-        if (sum[0] + sum[1] == NUMBER) return true;
-        return false;
-    }
-    static void sync(HashSet<int> visited, int[,] map)
-    {
-        List<int> list = visited.ToList();
-
-        ch.h = list[0];
-        ch.w = list[1];
-        ch.e = list[2];
-        ch.l = list[3];
-        ch.o = list[4];
-        ch.r = list[5];
-        ch.d = list[6];
-        map[0, 0] = ch.h; map[1, 0] = ch.w;
-        map[0, 1] = ch.e; map[1, 1] = ch.o;
-        map[0, 2] = ch.l; map[1, 2] = ch.r;
-        map[0, 3] = ch.l; map[1, 3] = ch.l;
-        map[0, 4] = ch.o; map[1, 4] = ch.d;
-    }
-    static void display(int[,] map)
-    {
-        Console.WriteLine($"  {map[0, 0]}{map[0, 1]}{map[0, 2]}{map[0, 3]}{map[0, 4]}\n" +
-            $"+ {map[1, 0]}{map[1, 1]}{map[1, 2]}{map[1, 3]}{map[1, 4]}\n" +
-            "-------");
-        if(NUMBER > 99999)
-        {
-            Console.WriteLine($" {NUMBER}");
-        }
-        else
-        {
-            Console.WriteLine($"  {NUMBER}");
-        }
-    }
+    Console.WriteLine($"  {table[(int)ch.h]}{table[(int)ch.e]}{table[(int)ch.l]}{table[(int)ch.l]}{table[(int)ch.o]}\n" +
+                      $"+ {table[(int)ch.w]}{table[(int)ch.o]}{table[(int)ch.r]}{table[(int)ch.l]}{table[(int)ch.d]}\n" +
+                      "-------\n" +
+                      ((result > 99999) ? " " : "  ") + result); return;
 }
+
+OUT: Console.WriteLine("No Answer"); return;
+
+bool recur(int len, int check)
+{
+    if(len == 7)
+    {
+        int sum1 = table[(int)ch.h] * 10000 + table[(int)ch.e] * 1000 + table[(int)ch.l] * 100 + table[(int)ch.l] * 10 + table[(int)ch.o];
+        int sum2 = table[(int)ch.w] * 10000 + table[(int)ch.o] * 1000 + table[(int)ch.r] * 100 + table[(int)ch.l] * 10 + table[(int)ch.d];
+        
+        if (sum1 + sum2 == result) return true; return false;
+    }
+    int i = (len != (int)ch.h && len != (int)ch.w) ? 0 : 1;
+    for (; i < 10; i++)
+    {
+        if ((check & 1 << i) > 0) continue; 
+        table[len] = i;
+        if (recur(len + 1, check | 1 << i)) return true;
+    }
+    return false;
+}
+
+enum ch { h = 0, e, l, o, w, r, d }
