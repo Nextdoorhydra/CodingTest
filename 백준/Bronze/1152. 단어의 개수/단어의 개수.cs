@@ -1,0 +1,1 @@
+Console.WriteLine(Console.ReadLine().Split().Where(s=>s.Length>0).ToArray().Length);
