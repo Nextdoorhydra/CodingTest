@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdint.h>
-#define DIV 42
 
 int main() {
     uint64_t log = 0;
@@ -8,9 +7,10 @@ int main() {
     for (int i = 0; i < 10; i++) {
         int num;
         scanf("%d", &num);
-        if ((log & (1ULL << (num % DIV))) == 0ULL) {
+        uint64_t pos = 1ULL << (num % 42);
+        if ((log & pos) == 0ULL) {
             ans++;
-            log |= (1ULL << (num % DIV));
+            log |= pos;
         }
     }
     printf("%d", ans);
