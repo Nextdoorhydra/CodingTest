@@ -28,9 +28,12 @@ int idx = 0;
 
 string S = Console.ReadLine();
 
+int arraySize = 240 * 1024 * 1024 / sizeof(int);
+int[] largeArray = new int[arraySize];
+
 try
 {
-    while(Math.PI > 3)
+    while(largeArray.Length > 0)
     {
         switch (S[idx++])
         {
