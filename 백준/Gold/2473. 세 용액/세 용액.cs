@@ -1,25 +1,25 @@
-int gLength = int.Parse(Console.ReadLine());
-var g = Array.ConvertAll(Console.ReadLine().Split(), long.Parse);
+int size = int.Parse(Console.ReadLine());
+var g = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
 
-long min = long.MaxValue;
-long[] ans = new long[3] { g[0], g[1], g[2] };
+var min = long.MaxValue;
+(int i, int l, int r) ans = (g[0], g[1], g[2]);
 
 Array.Sort(g);
 
-for (int i = 0; i < gLength - 2; i++)
+for (int i = 0; i < size - 2; i++)
 {
     int l = i + 1;
-    int r = gLength - 1;
+    int r = size - 1;
 
     while(l < r)
     {
-        long sum = g[i] + g[l] + g[r];
+        long sum = (long)g[i] + g[l] + g[r];
 
         var S = Math.Abs(sum);
         if (S < min)
         {
             min = S;
-            ans = new long[3] { g[i], g[l], g[r] };
+            ans = (g[i], g[l], g[r]);
         }
 
         if (sum == 0) goto OUT;
@@ -28,4 +28,4 @@ for (int i = 0; i < gLength - 2; i++)
     }
 }
 
-OUT: Console.WriteLine($"{ans[0]} {ans[1]} {ans[2]}");
+OUT: Console.WriteLine($"{ans.i} {ans.l} {ans.r}");
