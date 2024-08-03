@@ -18,12 +18,14 @@ Func<int, string> FizzBuzz = (n) =>
     }
 };
 
-Func<string, bool> IsFizzBuzz = s => s == "Fizz" || s == "Buzz" || s == "FizzBuzz";
+var g = new string[3]; int ans;
 
-var a = Console.ReadLine();
-var b = Console.ReadLine();
-var c = Console.ReadLine();
+for (int i = 0; i < 3; i++)
+{
+    g[i] = Console.ReadLine();
 
-if (!IsFizzBuzz(a)) Console.WriteLine(FizzBuzz(int.Parse(a) + 3));
-else if (!IsFizzBuzz(b)) Console.WriteLine(FizzBuzz(int.Parse(b) + 2));
-else if (!IsFizzBuzz(c)) Console.WriteLine(FizzBuzz(int.Parse(c) + 1));
+    if (int.TryParse(g[i], out ans))
+    {
+        Console.WriteLine(FizzBuzz(ans + 3 - i)); break;
+    }
+}
