@@ -2,7 +2,7 @@ var input = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
 var g = new long[input[0]];
 for (int i = 0; i < input[0]; i++) g[i] = int.Parse(Console.ReadLine());
 
-long ans = 0, l = 1, r = g.Max(); ;
+long l = 1, r = g.Max(); ;
 while (l <= r)
 {
     long div = (l + r) / 2;
@@ -10,7 +10,6 @@ while (l <= r)
 
     if(det >= input[1])
     {
-        ans = Math.Max(ans, div);
         l = div + 1;
     }
     else if(det < input[1])
@@ -19,4 +18,4 @@ while (l <= r)
     }
 }
 
-Console.WriteLine(ans);
+Console.WriteLine(r);
