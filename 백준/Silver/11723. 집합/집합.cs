@@ -1,13 +1,13 @@
 using System.Text;
 
 int S = 0;
-StringBuilder sb = new StringBuilder();
+StringBuilder sb = new StringBuilder(1_000_000);
 
 int n = int.Parse(Console.ReadLine());
 
 for(int i = 0; i < n; i++)
 {
-    string[] input = Console.ReadLine().Split();
+    Span<string> input = Console.ReadLine().Split();
     int x = input.Length > 1 ? int.Parse(input[1]) : 0;
 
     switch (input[0])
@@ -21,7 +21,7 @@ for(int i = 0; i < n; i++)
             break;
 
         case "check":
-            sb.Append((((S & (1 << x)) == 0 ? 0 : 1)) + "\n");
+            sb.AppendLine((S & (1 << x)) == 0 ? "0" : "1");
             break;
 
         case "toggle":
