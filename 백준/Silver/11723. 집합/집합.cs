@@ -1,13 +1,14 @@
 using System.Text;
 
 int S = 0;
-StringBuilder sb = new StringBuilder(1_000_000);
+StreamReader sr = new StreamReader(new BufferedStream(Console.OpenStandardInput()));
+StreamWriter sw = new StreamWriter(new BufferedStream(Console.OpenStandardOutput()));
 
-int n = int.Parse(Console.ReadLine());
+int n = int.Parse(sr.ReadLine());
 
 for(int i = 0; i < n; i++)
 {
-    Span<string> input = Console.ReadLine().Split();
+    Span<string> input = sr.ReadLine().Split();
     int x = input.Length > 1 ? int.Parse(input[1]) : 0;
 
     switch (input[0])
@@ -21,7 +22,7 @@ for(int i = 0; i < n; i++)
             break;
 
         case "check":
-            sb.AppendLine((S & (1 << x)) == 0 ? "0" : "1");
+            sw.WriteLine((S & (1 << x)) == 0 ? "0" : "1");
             break;
 
         case "toggle":
@@ -38,4 +39,5 @@ for(int i = 0; i < n; i++)
     }
 }
 
-Console.WriteLine(sb);
+sr.Close();
+sw.Close();
