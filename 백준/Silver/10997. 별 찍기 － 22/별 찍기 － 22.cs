@@ -16,43 +16,38 @@ Action<int, int, int, string> printL = (l, m, r, ch) =>
     print(r, spa); cl();
 };
 
-if(n == 1)
+printL(0, n, 0, ast);
+
+if(n > 1)
 {
-    print(1, ast);
-}
-else
-{
-    print(n, ast); cl();
-    print(1, ast); cl();
+    top(n, 2, 0);
 
-    recur(n);
-
-    print(1, ast);
-    print((n - 1) / 2, spa); cl();
-
-    recur2(n);
+    printL(0, 1, (n - 1) / 2, ast);
+    btm(n);
 }
 
 sw.Close();
 
-void recur(int n, int l = 2, int r = 0)
+void top(int n, int l, int r)
 {
-    if (n - l - r < 3) return;
-    printL(l / 2, n - l - r, r / 2, ast);
+    int m = n - l - r;
 
-    if (n - l - r - 4 < 3) return;
-    printL((l + 2) / 2, n - l - r - 4, (r + 2) / 2, sp);
+    if (m < 3) return;
+    
+    printL(l / 2, l == 2 ? 0 : m, r / 2, sp);
+    printL(l / 2, m, r / 2, ast);
 
-    recur(n, l += 2, r += 2);
+    top(n, l += 2, r += 2);
 }
-void recur2(int n, int acc = 0)
+
+void btm(int n, int acc = 0)
 {
     int _n = 4 * acc + 1;
     int _lr = (n - _n) / 4;
 
     printL(_lr, _n, _lr, ast);
+    if (n == _n) return;
     printL(_lr, _n, _lr, sp);
 
-    if (n == _n) return;
-    recur2(n, ++acc);
+    btm(n, ++acc);
 }
