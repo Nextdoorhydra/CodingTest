@@ -17,16 +17,16 @@ for (int h = 0; h < box.GetLength(2); h++)
 }
 
 //declare
-Stack<(int, int, int)> stack = new Stack<(int, int, int)>();
+List<(int, int, int)> next = new List<(int, int, int)>();
 
 var dx = new int[] { 1, 0, -1, 0, 0, 0 };
 var dy = new int[] { 0, 1, 0, -1, 0, 0 };
 var dz = new int[] { 0, 0, 0, 0, 1, -1 };
 
-var cordinations = (from x in Enumerable.Range(0, box.GetLength(0))
+var cordinations = from x in Enumerable.Range(0, box.GetLength(0))
                     from y in Enumerable.Range(0, box.GetLength(1))
                     from z in Enumerable.Range(0, box.GetLength(2))
-                    select (x, y, z));
+                    select (x, y, z);
 
 Func<int[,,], (int x, int y, int z), bool> IsPassable = (arr, v) =>
     v.x >= 0 && v.x < arr.GetLength(0) &&
@@ -41,18 +41,18 @@ foreach ((int x, int y, int z) l in cordinations) //검사
 {
     if ((state)box[l.x, l.y, l.z] == Raw)
     {
-        Console.WriteLine(DAY = -1);
-        return;
+        DAY = -1;
+        break;
     }
 }
+
 Console.WriteLine(DAY);
 
-int dfs(ref int[,,] _box)
+//func
+int dfs(ref int[,,] _box, int day = -1)
 {
-    int day = 0;
-    var position = cordinations.Where(l => (state)box[l.x, l.y, l.z] == Rip).ToArray();
-
-    do
+    for(var position = cordinations.Where(l => (state)box[l.x, l.y, l.z] == Rip).ToList(); 
+        position.Count > 0; day++, next.Clear())
     {
         foreach ((int x, int y, int z) l in position)
         {
@@ -62,44 +62,14 @@ int dfs(ref int[,,] _box)
                 if (IsPassable(_box, current))
                 {
                     _box[current.x, current.y, current.z] = (int)Rip;
-                    stack.Push(current);
+                    next.Add(current);
                 }
             }
         }
-
-        if (stack.Count == 0) break;
-
-        position = stack.ToArray();
-
-        stack.Clear();
-
-        day++;
-#if _DEBUG
-    display3D(_box);
-#endif
-    } while (true);
-
-
+        position = new List<(int, int, int)>(next);
+    }
     return day;
 }
-
-#if _DEBUG
-void display3D(int[,,] arr)
-{
-    for (int h = 0; h < arr.GetLength(2); h++)
-    {
-        Console.WriteLine($"\n+---< {h} 층>---+");
-        for (int col = 0; col < arr.GetLength(1); col++)
-        {
-            Console.WriteLine();
-            for (int row = 0; row < arr.GetLength(0); row++)
-            {
-                Console.Write(arr[row, col, h] + " ");
-            }
-        }
-    }
-}
-#endif
 
 enum state
 {
