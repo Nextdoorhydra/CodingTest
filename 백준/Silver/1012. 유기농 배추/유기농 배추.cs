@@ -2,48 +2,48 @@ using static System.Console;
 
 for (int rep = int.Parse(ReadLine()); rep > 0; rep--)
 {
-    var size = Array.ConvertAll(ReadLine().Split(), int.Parse);
+    var len = Array.ConvertAll(ReadLine().Split(), int.Parse);
 
-    var g = new int[size[0], size[1]];
+    var g = new int[len[0], len[1]];
 
-    for (int i = 0; i < size[2]; i++)
+    for (int i = 0; i < len[2]; i++)
     {
-        var input = Array.ConvertAll(ReadLine().Split(), int.Parse);
-        g[input[0], input[1]] = 1;
+        var get = Array.ConvertAll(ReadLine().Split(), int.Parse);
+        g[get[0], get[1]] = 1;
     }
 
     var dr = new int[] { 1, 0, -1, 0 };
     var dc = new int[] { 0, 1, 0, -1 };
 
-    Func<(int r, int c), bool> IsPassable = x => x.r >= 0 && x.c >= 0 && x.r < size[0] && x.c < size[1];
-    Queue<(int, int)> queue = new Queue<(int, int)>();
+    Func<(int r, int c), bool> Check = x => x.r >= 0 && x.c >= 0 && x.r < len[0] && x.c < len[1];
+    Queue<(int, int)> Q = new Queue<(int, int)>();
 
-    int answer = 0;
-    for(int row =  0; row < size[0]; row++)
+    int cnt = 0;
+    for(int r =  0; r < len[0]; r++)
     {
-        for (int col = 0; col < size[1]; col++)
+        for (int c = 0; c < len[1]; c++)
         {
-            if (g[row, col] != 1) continue;
-            queue.Enqueue((row, col));
-            g[row, col]++;
+            if (g[r, c] != 1) continue;
+            Q.Enqueue((r, c));
+            g[r, c]++;
 
-            while(queue.Count > 0)
+            while(Q.Count > 0)
             {
-                (int r, int c) now = queue.Dequeue();
+                (int r, int c) pos = Q.Dequeue();
 
                 for(int i = 0; i < 4; i++)
                 {
-                    (int r, int c) next = (now.r + dr[i],  now.c + dc[i]);
+                    (int r, int c) dep = (pos.r + dr[i], pos.c + dc[i]);
 
-                    if(IsPassable(next) && g[next.r, next.c] == 1)
+                    if(Check(dep) && g[dep.r, dep.c] == 1)
                     {
-                        g[next.r, next.c]++;
-                        queue.Enqueue(next);
+                        g[dep.r, dep.c]++;
+                        Q.Enqueue(dep);
                     }
                 }
             }
-            answer++;
+            cnt++;
         }
     }
-    Console.WriteLine(answer);
+    WriteLine(cnt);
 }
