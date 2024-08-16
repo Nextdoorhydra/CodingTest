@@ -1,50 +1,43 @@
 var input = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
-int inventory = input[2];
+int block = input[2];
 var g = new int[input[0] * input[1]];
+var level = new int[257];
 
-for (int i = 0; i < g.Length;)
+for (int i = 0; i < input[0]; i++)
 {
     var _input = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
-    foreach (int x in _input) g[i++] = x;
+    foreach (int x in _input) level[x]++;
 }
 
-//메인
-var ans = new int[2];
-var Working = (int[] arr, int level, int n) =>
-{
-    for (int i = 0; i < arr.Length; i++) if (arr[i] == level) arr[i] += n;
-};
+int l = 0, r = 256, time = 0;
 
-while (true)
+while(l < r)
 {
-    int top = 0, btm = int.MaxValue;
-    var level = new int[257];
-
-    for(int i = 0; i < g.Length; i++)
+    if (level[l] == 0)
     {
-        top = ans[1] = Math.Max(g[i], top);
-        btm = Math.Min(g[i], btm);
-        level[g[i]]++;
+        l++;
     }
-
-    if (top == btm) break;
-
-    int topCnt = level[top], btmCnt = level[btm];
-
-    if (inventory < btmCnt || 2 * topCnt < btmCnt)
+    else if(level[r] == 0)
     {
-        //dig
-        inventory += topCnt;
-        ans[0] += 2 * topCnt;
-        Working(g, top, -1);
+        r--;
     }
     else
     {
-        //fill
-        inventory -= btmCnt;
-        ans[0] += btmCnt;
-        Working(g, btm, 1);
+        int dig = level[r], fill = level[l];
+
+        if (block < fill || fill > 2 * dig)
+        {
+            time += 2 * dig;
+            block += dig;
+            level[r-- - 1] += dig;
+        }
+        else
+        {
+            time += fill;
+            block -= fill;
+            level[l++ + 1] += fill;
+        }
     }
 }
 
-Console.WriteLine($"{ans[0]} {ans[1]}");
+Console.WriteLine(time + " " + r);
