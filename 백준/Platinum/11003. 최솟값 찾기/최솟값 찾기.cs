@@ -1,34 +1,31 @@
-StreamReader sr = new(new BufferedStream(Console.OpenStandardInput()));
-StreamWriter sw = new(new BufferedStream(Console.OpenStandardOutput()));
-var input = Array.ConvertAll(sr.ReadLine().Split(), int.Parse);
-var seq = Array.ConvertAll(sr.ReadLine().Split(), int.Parse);
+var input = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+var seq = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+using StreamWriter sw = new(Console.OpenStandardOutput(), bufferSize: input[0]);
 var pq = new PriorityQueue<int, int>();
 var dic = new Dictionary<int, int>();
+int l = 0, r = 0, k, sub;
 
-int l = 0, r = 0, k, remove;
-
-//초기 처리
 while (r < input[1])
 {
     k = seq[r++];
     pq.Enqueue(k, k);
 
-    sw.Write(pq.Peek() + " ");
+    sw.WriteLine(pq.Peek());
 }
 
 while (r < input[0])
 {
     k = seq[r++];
-    remove = seq[l++];
+    sub = seq[l++];
     pq.Enqueue(k, k);
 
-    if (dic.ContainsKey(remove))
+    if (dic.ContainsKey(sub))
     {
-        dic[remove]++;
+        dic[sub]++;
     }
     else
     {
-        dic.Add(remove, 1);
+        dic.Add(sub, 1);
     }
 
     while (dic.ContainsKey(pq.Peek()) && dic[pq.Peek()] > 0)
@@ -37,7 +34,5 @@ while (r < input[0])
         pq.Dequeue();
     }
 
-    sw.Write(pq.Peek() + " ");
+    sw.WriteLine(pq.Peek());
 }
-sr.Close();
-sw.Close();
