@@ -2,21 +2,24 @@ using StreamWriter sw = new(Console.OpenStandardOutput());
 
 for (int r = int.Parse(Console.ReadLine()); r > 0; r--)
 {
+    long max, min, k;
     var dic = new Dictionary<long, int>();
+    PriorityQueue<long, long> maxQ = new(), minQ = new();
 
-    var maxQ = new PriorityQueue<long, long>();
-    var minQ = new PriorityQueue<long, long>();
+    var deque = (PriorityQueue<long, long> Q, int sw) =>
+    {
+        while (Q.Count > 0 && dic[sw * Q.Peek()] == 0) Q.Dequeue();
+    };
 
     for (int _r = int.Parse(Console.ReadLine()); _r > 0; _r--)
     {
         var input = Console.ReadLine().Split();
-        long k = int.Parse(input[1]);
+        k = int.Parse(input[1]);
 
         switch (input[0])
         {
             case "I":
-                maxQ.Enqueue(-k, -k);
-                minQ.Enqueue(k, k);
+                maxQ.Enqueue(-k, -k); minQ.Enqueue(k, k);
 
                 if (dic.ContainsKey(k))
                 {
@@ -28,32 +31,20 @@ for (int r = int.Parse(Console.ReadLine()); r > 0; r--)
                 }
                 break;
             case "D":
-                if (maxQ.Count > 0 && k == 1)
+                if (k == 1)
                 {
-                    while (maxQ.Count > 0 && dic[-maxQ.Peek()] == 0) maxQ.Dequeue();
-
-                    if (maxQ.Count > 0)
-                    {
-                        dic[-maxQ.Dequeue()]--;
-                    }
+                    deque(maxQ, -1);
+                    if (maxQ.Count > 0) dic[-maxQ.Dequeue()]--;
                 }
-                else if (minQ.Count > 0 && k == -1)
+                else
                 {
-                    while (minQ.Count > 0 && dic[minQ.Peek()] == 0) minQ.Dequeue();
-
-                    if (minQ.Count > 0)
-                    {
-                        dic[minQ.Dequeue()]--;
-                    }
+                    deque(minQ, 1);
+                    if (minQ.Count > 0) dic[minQ.Dequeue()]--;
                 }
                 break;
         }
     }
-
-    long max, min;
-
-    while (maxQ.Count > 0 && dic[-maxQ.Peek()] == 0) maxQ.Dequeue();
-    while (minQ.Count > 0 && dic[minQ.Peek()] == 0) minQ.Dequeue();
+    deque(maxQ, -1); deque(minQ, 1);
 
     sw.WriteLine((maxQ.TryDequeue(out max, out _), minQ.TryDequeue(out min, out _)) switch
     {
