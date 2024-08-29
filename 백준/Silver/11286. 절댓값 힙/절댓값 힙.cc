@@ -4,17 +4,30 @@
 #include <cmath>
 using namespace std;
 
-int main()
+struct compare
+{
+    bool operator()(int k1, int k2)
+    {
+        int first_abs = abs(k1);
+        int second_abs = abs(k2);
+        if (first_abs == second_abs)
+        {
+            return k1 > k2;
+        }
+        else
+        {
+            return first_abs > second_abs;
+        }
+    }
+};
+
+main()
 {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> heap;
-    priority_queue<int, vector<int>, greater<int>> compare;
-    vector<int> ans;
-    auto push = [&heap](int x)
-    { heap.push(make_pair(abs(x), x)); };
+    priority_queue<int, vector<int>, compare> heap;
 
     int n, temp;
     cin >> n;
@@ -22,39 +35,23 @@ int main()
     for (int i = 0; i < n; i++)
     {
         cin >> temp;
-
-        if (temp != 0)
+        if (temp == 0)
         {
-            push(temp);
-        }
-        else
-        {
-            if (heap.size() == 0)
+            if (heap.empty())
             {
-                ans.push_back(0);
+                cout << "0\n";
             }
             else
             {
-                temp = heap.top().second;
-                while (heap.size() > 0 && heap.top().first == abs(temp))
-                {
-                    compare.push(heap.top().second);
-                    heap.pop();
-                }
-
-                ans.push_back(compare.top());
-                compare.pop();
-
-                while (compare.size() > 0)
-                {
-                    push(compare.top());
-                    compare.pop();
-                }
+                cout << heap.top() << "\n";
+                heap.pop();
             }
+        }
+        else
+        {
+            heap.push(temp);
         }
     }
 
-    for (auto i : ans)
-        cout << i << "\n";
     return 0;
 }
