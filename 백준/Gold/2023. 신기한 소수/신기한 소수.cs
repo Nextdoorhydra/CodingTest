@@ -1,5 +1,5 @@
 using StreamWriter sw = new(Console.OpenStandardOutput());
-int count = int.Parse(Console.ReadLine()), max = GetMax(count);
+int count = int.Parse(Console.ReadLine());
 
 dfs(0, 0);
 
@@ -33,14 +33,4 @@ bool IsPrime(int x)
     }
 
     return true;
-}
-
-int GetMax(int target)
-{
-    int acc = 1;
-    for(int i = 0; i < target; i++)
-    {
-        acc = acc * 10;
-    }
-    return acc;
 }
