@@ -1,10 +1,9 @@
-var input = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+var i = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+Console.WriteLine(recur(i[0], i[1], i[2]));
 
-Console.WriteLine(recur(input[0], input[1], input[2]));
-
-decimal recur(int value, int depth, int mod)
+decimal recur(int n, int pow, int mod)
 {
-    if (depth == 1) return value % mod;
-    decimal ans = recur(value, depth / 2, mod) % mod;
-    return ans * ans * (depth % 2 != 0 ? value % mod : 1) % mod;
+    if (pow == 1) return n % mod;
+    decimal ans = recur(n, pow / 2, mod) % mod;
+    return ans * ans * (pow % 2 != 0 ? n % mod : 1) % mod;
 }
