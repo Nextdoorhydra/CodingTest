@@ -1,17 +1,10 @@
 using StreamWriter sw = new(Console.OpenStandardOutput());
-
 int count = int.Parse(Console.ReadLine()), max = GetMax(count);
-var visited = new bool[count];
 
-for(int i = 1; i <= 9; i++)
-{
-    dfs(1, i);
-}
+dfs(0, 0);
 
 void dfs(int depth, int number)
 {
-    if (!IsPrime(number)) return;
-
     if (depth == count)
     {
         sw.WriteLine(number);
@@ -20,7 +13,8 @@ void dfs(int depth, int number)
 
     for(int i = 1; i <= 9; i++)
     {
-        dfs(depth + 1, number * 10 + i);
+        int next = number * 10 + i;
+        if(IsPrime(next)) dfs(depth + 1, number * 10 + i);
     }
 }
 
@@ -48,6 +42,5 @@ int GetMax(int target)
     {
         acc = acc * 10;
     }
-
     return acc;
 }
