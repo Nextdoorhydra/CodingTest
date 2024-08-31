@@ -3,7 +3,6 @@ using namespace std;
 
 int n;
 void dfs(int, int);
-bool isPrime(int);
 
 int main()
 {
@@ -15,11 +14,20 @@ int main()
 
     for (auto i : {2, 3, 5, 7})
         dfs(i, 1);
-
 }
 
 void dfs(int num, int depth)
 {
+    auto isPrime = [](int num)
+    {
+        for (int i = 2; i <= num / 2; i++)
+        {
+            if (num % i == 0)
+                return false;
+        }
+        return true;
+    };
+    
     if (depth == n)
     {
         cout << num << '\n';
@@ -33,14 +41,4 @@ void dfs(int num, int depth)
         if (isPrime(num * 10 + i))
             dfs(num * 10 + i, depth + 1);
     }
-}
-
-bool isPrime(int num)
-{
-    for (int i = 2; i <= num / 2; i++)
-    {
-        if (num % i == 0)
-            return false;
-    }
-    return true;
 }
