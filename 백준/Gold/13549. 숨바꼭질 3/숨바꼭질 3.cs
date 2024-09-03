@@ -1,66 +1,31 @@
 const int MAX = 100001;
-var queue = new Queue<int>();
-var visited = new bool[MAX];
-var move = new Func<int, int>[2];
-move[0] = (int x) => x - 1; move[1] = (int x) => x + 1;
-
 var input = Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
-int start = input[0], end = input[1], count = 0, answer = int.MaxValue;
-var map = new int[MAX];
-map[start]++; map[end]++;
+int n = input[0], k = input[1];
 
+var queue = new Queue<(int pos, int time)>();
+var visited = new bool[MAX];
 var IsPassable = (int x) => x >= 0 && x < MAX;
-var getTelePos = (int x) =>
+var move = new List<Func<int, (int pos, int timelapse)>>() { x => (x * 2, 0), x => (x - 1, 1), x => (x + 1, 1) };
+
+queue.Enqueue((n, 0));
+
+while (queue.Count > 0)
 {
-    if (x is 0) return Enumerable.Repeat(0, 1);
-    var seq = Enumerable.Range(0, MAX).Select(n => x * (int)Math.Pow(2, n)).TakeWhile(IsPassable);
-    return seq.Where(x => x <= end).Concat(seq.Where(x => x > end).Take(1));
-};
+    var now = queue.Dequeue();
+    visited[now.pos] = true;
 
-queue.Enqueue(start);
-queue.Enqueue(-1);
-
-while (queue.Count > 1)
-{
-    while(queue.Peek() != -1)
+    if (now.pos == k)
     {
-        foreach (var pos in getTelePos(queue.Dequeue()))
-        {
-            if (visited[pos]) continue;
-            visited[pos] = true;
-            queue.Enqueue(pos);
-        }
-    }
-    queue.Dequeue();
-    queue.Enqueue(-1);
-
-    while (queue.Peek() != -1)
-    {
-        int current = queue.Dequeue();
-
-        if (current == end)
-        {
-            answer = Math.Min(answer, count);
-            goto OUT;
-        }
-        else if (current > end)
-        {
-            answer = Math.Min(answer, count + current - end);
-        }
-        else
-        {
-            foreach (var f in move)
-            {
-                int pos = f(current);
-                if (!IsPassable(pos) || visited[pos]) continue;
-                queue.Enqueue(pos);
-            }
-        }
+        Console.WriteLine(now.time);
+        return;
     }
 
-    queue.Dequeue();
-    queue.Enqueue(-1);
-    count++;
+    foreach (var f in move)
+    {
+        var next = f(now.pos);
+        if (IsPassable(next.pos) && !visited[next.pos])
+        {
+            queue.Enqueue((next.pos, next.timelapse + now.time));
+        }
+    }
 }
-
-OUT:  Console.WriteLine(answer);
