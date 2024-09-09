@@ -1,14 +1,12 @@
 var div = Console.ReadLine().Split().Select(int.Parse).ToList()[1];
 var seq = Console.ReadLine().Split().Select(int.Parse).ToList();
-var orderedSeq = seq.OrderBy(x => x).ToList();
 var sum = seq.Aggregate(new List<int>() { 0 }, (acc, x) =>
 {
     acc.Add(x + acc[^1]);
     return acc;
 }).Skip(1).ToList();
 
-int l = orderedSeq[^1], r = sum[^1];
-int answer = 0;
+int l = seq.Max(), r = sum[^1], ANS = 0;
 
 while(l <= r)
 {
@@ -16,7 +14,7 @@ while(l <= r)
 
     if (IsDivided(target))
     {
-        answer = target;
+        ANS = target;
         r = target - 1;
     }
     else
@@ -25,19 +23,17 @@ while(l <= r)
     }
 }
 
-Console.WriteLine(answer);
+Console.WriteLine(ANS);
 
 bool IsDivided(int target)
 {
-     int cnt = 0, offset = 0;
+     int cnt = 1, offset = 0;
 
     for(int i = 1; i < sum.Count; i++)
-    {
         if (sum[i] > target + offset)
         {
             cnt++; offset = sum[i - 1];
         }
-    }
 
-    if (cnt + 1 <= div) return true; else return false;
+    if (cnt <= div) return true; else return false;
 }
