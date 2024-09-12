@@ -10,30 +10,22 @@ var updateQueen = ((int r, int c) pos, bool status) =>
     RDiagonal[pos.r + pos.c] = status;
 };
 
-var validCheck = ((int r, int c) pos) =>
-{
-    var IsPassable = ((int r, int c) x) => x.r >= 0 && x.c >= 0 && x.r < N && x.c < N;
-    var IsAttack = ((int r, int c) x) => column[x.c] || LDiagonal[x.r - x.c + N] || RDiagonal[x.r + x.c];
-
-    return IsPassable(pos) && !IsAttack(pos);
-};
-
 NQueen();
 Console.WriteLine(ANSWER);
 
 void NQueen(int r = 0)
 {
-    if(r == N)
+    if (r == N)
     {
         ANSWER++;
         return;
     }
 
-    foreach(var c in Enumerable.Range(0, N))
+    foreach (var c in Enumerable.Range(0, N))
     {
         var pos = (r, c);
 
-        if (validCheck(pos))
+        if (!column[pos.c] && !LDiagonal[pos.r - pos.c + N] && !RDiagonal[pos.r + pos.c])
         {
             updateQueen(pos, true);
             NQueen(r + 1);
