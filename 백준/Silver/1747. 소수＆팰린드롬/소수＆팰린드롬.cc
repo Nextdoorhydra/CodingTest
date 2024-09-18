@@ -28,9 +28,6 @@ int main()
 
 bool isPalindrome(int n)
 {
-    if (n < 10)
-        return true;
-
     string str = to_string(n);
     int l = 0, r = str.size() - 1;
 
