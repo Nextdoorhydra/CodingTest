@@ -1,5 +1,4 @@
 using static state;
-using StreamWriter sw = new(Console.OpenStandardOutput());
 var read = () => Console.ReadLine().Split().Select(int.Parse).ToList();
 List<List<int>> edgeList;
 int testCase = read().First(), N, E;
@@ -17,18 +16,18 @@ for(int t = 0; t < testCase; t++)
         edgeList[input.Last()].Add(input.First());
     }
 
-    sw.WriteLine(bfs() ? "YES" : "NO");
+    Console.WriteLine(bfs() ? "YES" : "NO");
 }
 
 bool bfs()
 {
     Queue<int> queue = new Queue<int>();
-    var swColor = (state st) => st switch { RED => BLUE, BLUE => RED, _ => NOTHING };
     List<state>  nodeState = Enumerable.Range(0, N + 1).Select(_ => NOTHING).ToList();
     
     for(int i = 1; i <= N; i++)
     {
         if (nodeState[i] != NOTHING) continue;
+
         nodeState[i] = RED;
         queue.Enqueue(i);
 
@@ -40,7 +39,7 @@ bool bfs()
             {
                 if (nodeState[next] == NOTHING)
                 {
-                    nodeState[next] = swColor(nodeState[pos]);
+                    nodeState[next] = nodeState[pos] switch { RED => BLUE, _ => RED };
                     queue.Enqueue(next);
                 }
                 else if (nodeState[next] == nodeState[pos])
