@@ -1,5 +1,5 @@
 using StreamWriter sw = new(Console.OpenStandardOutput());
-int n = int.Parse(Console.ReadLine()), pos = 0;
+int n = int.Parse(Console.ReadLine());
 var map = new int[n, 2 * n - 1];
 
 recur(0, n - 1, n);
@@ -21,7 +21,6 @@ void recur(int r, int c, int height)
     }
     
     int half = height / 2;
-
     recur(r, c, half);
     recur(r + half, c - half, half);
     recur(r + half, c + half, half);
