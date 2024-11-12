@@ -1,0 +1,1 @@
+Console.ReadLine();Console.WriteLine(Console.ReadLine().ToCharArray().Select((x, i) => (x - 'a' + 1) * Math.Pow(31, i)).Sum() % 1234567891);
