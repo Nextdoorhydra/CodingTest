@@ -12,8 +12,7 @@ for (int i = 1; i < N; i++)
         int min = dp[j, j + i] + m[j][0] * m[j + i][1] * m[j + i + 1][1];
 
         for (int k = 1; k <= i; k++)
-            min = Math.Min(min, m[j][0] * m[j + k - 1][1] * m[j + i + 1][1] 
-                + dp[j + k, j + i + 1] + (k - 1 == 0 ? 0 : dp[j, j + k - 1]));
+            min = Math.Min(min, m[j][0] * m[j + k - 1][1] * m[j + i + 1][1] + dp[j + k, j + i + 1] + dp[j, j + k - 1]);
 
         dp[j, j + i + 1] = min;
     }
