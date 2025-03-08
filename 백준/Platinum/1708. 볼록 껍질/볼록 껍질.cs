@@ -11,10 +11,7 @@ for (int i = 0; i < rep; i++)
 
 v = v.OrderBy(v => v.y).ThenBy(v => v.x).ToList();
 var v0 = v[0];
-v = v.Skip(1).OrderBy(v => (v.x - v0.x, v.y - v0.y), new AngleComparer())
-    .ThenBy(v => v.y)
-    .ThenBy(v => v.x)
-    .ToList();
+v = v.Skip(1).OrderBy(v => (v.x - v0.x, v.y - v0.y), new AngleComparer()).ToList();
 
 var ccw = ((long x, long y) v1, (long x, long y) v2, (long x, long y) v3)
     => v1.x * v2.y + v2.x * v3.y + v3.x * v1.y - v2.x * v1.y - v3.x * v2.y - v1.x * v3.y;
@@ -45,8 +42,20 @@ public class AngleComparer : IComparer<(long x, long y)>
 {
     public int Compare((long x, long y) v1, (long x, long y) v2)
     {
-        var det = v1.y * v2.x - v1.x * v2.y;
+        var det = v1.x * v2.y - v1.y * v2.x;
+        var norm = ((long x, long y) v) => v.x * v.x + v.y * v.y;
 
-        return Math.Sign(det);
+        if (det > 0)
+        {
+            return -1;
+        }
+        else if (det == 0)
+        {
+            return norm(v1) < norm(v2) ? -1 : 1;
+        }
+        else
+        {
+            return 1;
+        }
     }
 }
