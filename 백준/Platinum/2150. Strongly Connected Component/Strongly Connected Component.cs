@@ -15,6 +15,7 @@ for (int i = 0; i < E; i++)
     RG[input[1]].Add(input[0]);
 }
 
+HashSet<int> check = new();
 Stack<int> stack = new(), visitOrder = new();
 
 for (int i = 0; i < V; i++)
@@ -39,7 +40,11 @@ for (int i = 0; i < V; i++)
         else
         {
             var v = stack.Pop();
-            if (!visitOrder.Contains(v)) visitOrder.Push(v);
+            if (!check.Contains(v))
+            {
+                check.Add(v);
+                visitOrder.Push(v);
+            }
         }
     }
 }
