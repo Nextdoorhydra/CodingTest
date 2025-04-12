@@ -18,10 +18,8 @@ for (int i = 0; i < E; i++)
 }
 
 Stack<int> stack = new();
-Queue<int> queue = new();
 Stack<int> visitOrder = new();
 
-//forward
 for (int i = 0; i < V; i++)
 {
     if (visited[i]) continue;
@@ -47,16 +45,7 @@ for (int i = 0; i < V; i++)
         if (flag)
         {
             var v = stack.Pop();
-            queue.Enqueue(v);
-        }
-    }
-
-    while(queue.Count > 0)
-    {
-        var v = queue.Dequeue();
-        if (!visitOrder.Contains(v))
-        {
-            visitOrder.Push(v);
+            if (!visitOrder.Contains(v)) visitOrder.Push(v);
         }
     }
 }
@@ -64,21 +53,21 @@ for (int i = 0; i < V; i++)
 visited = new bool[V];
 stack.Clear();
 
-//reverse
 while (visitOrder.Count > 0)
 {
     var top = visitOrder.Pop();
     if (visited[top]) continue;
-    stack.Push(top);
 
-    var _answer = new List<int>();
+    var ans = new List<int>();
+    stack.Push(top);
 
     while (stack.Count > 0)
     {
         var now = stack.Pop();
-        visited[now] = true;
 
-        _answer.Add(now);
+        if (visited[now]) continue;
+        visited[now] = true;
+        ans.Add(now);
 
         foreach (var next in RG[now])
         {
@@ -87,7 +76,7 @@ while (visitOrder.Count > 0)
         }
     }
 
-    answer.Add(_answer);
+    answer.Add(ans);
 }
 
 answer.ForEach(x => x.Sort());
@@ -95,6 +84,4 @@ answer.Sort((x, y) => x[0].CompareTo(y[0]));
 
 Console.WriteLine(answer.Count);
 foreach (var x in answer)
-{
-    Console.WriteLine(string.Join(' ', x.Distinct().Select(val => val + 1)) + " -1");
-}
+    Console.WriteLine(string.Join(' ', x.Select(val => val + 1)) + " -1");
