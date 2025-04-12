@@ -1,5 +1,3 @@
-using static System.Net.Mime.MediaTypeNames;
-
 var read = () => Console.ReadLine().Split().Select(int.Parse).ToList();
 
 var input = read();
@@ -17,8 +15,7 @@ for (int i = 0; i < E; i++)
     RG[input[1]].Add(input[0]);
 }
 
-Stack<int> stack = new();
-Stack<int> visitOrder = new();
+Stack<int> stack = new(), visitOrder = new();
 
 for (int i = 0; i < V; i++)
 {
@@ -27,7 +24,6 @@ for (int i = 0; i < V; i++)
 
     while (stack.Count > 0)
     {
-        var flag = true;
         var now = stack.Peek();
 
         if (!visited[now])
@@ -38,11 +34,9 @@ for (int i = 0; i < V; i++)
             {
                 if (visited[next]) continue;
                 stack.Push(next);
-                flag = false;
             }
         }
-
-        if (flag)
+        else
         {
             var v = stack.Pop();
             if (!visitOrder.Contains(v)) visitOrder.Push(v);
