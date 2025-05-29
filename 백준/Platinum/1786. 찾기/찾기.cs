@@ -1,48 +1,34 @@
-string text = Console.ReadLine(), pattern = Console.ReadLine();
-var kmpTable = new int[pattern.Length];
-var answer = new List<int>();
+string text = Console.ReadLine(), pat = Console.ReadLine();
+var kmpTable = new int[pat.Length];
+var A = new List<int>();
 
-var kmp = (string t, string p, ICollection<int> indexContainer) =>
+kmpTable[0] = -1;
+int i = 1, j = -1;
+
+for (; i < pat.Length; i++)
 {
-    var GetkmpTable = (string s) =>
+    while (j >= 0 && pat[i] != pat[j + 1])
+        j = kmpTable[j];
+
+    if (pat[i] == pat[j + 1])
+        j++;
+
+    kmpTable[i] = j;
+}
+
+for (i = 0, j = -1; i < text.Length; i++)
+{
+    while (j >= 0 && text[i] != pat[j + 1])
+        j = kmpTable[j];
+
+    if (text[i] == pat[j + 1])
+        j++;
+
+    if (j == pat.Length - 1)
     {
-        var table = new int[s.Length];
-
-        table[0] = -1;
-        int i = 1, j = -1;
-
-        for(; i < s.Length; i++)
-        {
-            while (j >= 0 && s[i] != s[j + 1])
-                j = table[j];
-
-            if (s[i] == s[j + 1])
-                j++;
-
-            table[i] = j;
-        }
-
-        return table;
-    };
-
-    var kmpTable = GetkmpTable(pattern);
-    int i = 0, j = -1;
-
-    for (; i < t.Length; i++)
-    {
-        while (j >= 0 && t[i] != p[j + 1])
-            j = kmpTable[j];
-
-        if (t[i] == p[j + 1])
-            j++;
-
-        if (j == p.Length - 1)
-        {
-            indexContainer.Add(i - j + 1);
-            j = kmpTable[j];
-        }
+        A.Add(i - j + 1);
+        j = kmpTable[j];
     }
-};
+}
 
-kmp(text, pattern, answer);
-Console.WriteLine($"{answer.Count}\n{String.Join(' ', answer)}");
+Console.WriteLine($"{A.Count}\n{String.Join(' ', A)}");
