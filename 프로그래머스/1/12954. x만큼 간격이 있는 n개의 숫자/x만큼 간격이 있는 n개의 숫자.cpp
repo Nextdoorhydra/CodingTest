@@ -5,7 +5,7 @@ using namespace std;
 
 vector<long long> solution(int x, int n)
 {
-    int _x = x;
+    long long _x = x;
     vector<long long> answer;
     for (int i = 0; i < n; i++)
     {
